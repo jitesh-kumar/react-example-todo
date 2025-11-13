@@ -42,29 +42,44 @@ class TodoApp extends React.Component {
      * also it is an example usage for static method defining
      * @returns {*}
      */
-    static getUserSessionData(){
-        let loginData = localStorage.getItem('login');
-        loginData = JSON.parse(loginData);
-        if (loginData!==null && loginData.login===true){
-            return {userName:loginData.userName};
-        } else {
-            return false;
-        }
-    }
+     static getUserSessionData(){
+         const loginData = TodoApp.getLoginDataFromStorage();
+         if (loginData!==null && loginData.login===true){
+             return {userName:loginData.userName};
+         } else {
+             return false;
+         }
+     }
 
     /**
      * Kullanıcı login olmuş mu kontrol eder
      * Check user is logged
      * @returns {boolean}
      */
-    static isLogged() {
-        let loginData = localStorage.getItem('login');
-        loginData = JSON.parse(loginData);
-        if (loginData!==null && loginData.login===true){
-            return true;
-        }
-        return false;
-    }
+     static isLogged() {
+         const loginData = TodoApp.getLoginDataFromStorage();
+         if (loginData!==null && loginData.login===true){
+             return true;
+         }
+         return false;
+     }
+
+     /**
+      * login datasını local storage'den güvenli şekilde çözümler
+      * safely parse login data from local storage
+      * @returns {object|null}
+      */
+     static getLoginDataFromStorage() {
+         const loginData = localStorage.getItem('login');
+         if (loginData === null) {
+             return null;
+         }
+         try {
+             return JSON.parse(loginData);
+         } catch (e) {
+             return null;
+         }
+     }
 
     /**
      * kullanıcı login yaparak local storage'e gerekli datayı yazar
